@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pi-hole
+spec:
+  rules:
+  - host: pi-hole.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pi-hole
+            port:
+              name: http
+
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: pi-hole-tls
+# spec:
+#   tls:
+#   - hosts:
+#       - pi-hole.example.com
+#     secretName: pi-hole-tls
+#   rules:
+#   - host: pi-hole.example.com
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: pi-hole
+#             port:
+#               name: https

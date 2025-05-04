@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pi-hole
+spec:
+  selector:
+    matchLabels:
+      app: pi-hole
+  serviceName: "pi-hole"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pi-hole
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: pi-hole
+        image:  pihole/pihole:2025.04.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        env:
+        - name: TZ
+          value: "Europe/Berlin"
+        - name: FTLCONF_webserver_api_password
+          value: "piholeadmin"
+        - name: FTLCONF_dns_upstreams
+          value: "127.0.0.1"
+        # - name: TAIL_FTL_LOG
+        # - name: FTLCONF_[SETTING]
+        # - name: PIHOLE_UID
+        # - name: PIHOLE_GID
+        # - name: FTL_CMD
+        # - name: DNSMASQ_USER
+        # - name: ADDITIONAL_PACKAGES
+        ports:
+        - containerPort: 53
+          name:  udp-53
+          protocol: UDP
+        - containerPort: 53
+          name:  tcp-53
+          protocol: TCP
+        - containerPort: 80
+          name:  http
+        - containerPort: 443
+          name:  https
+        volumeMounts:
+        - name: pi-hole-data
+          mountPath: /etc/pihole
+      restartPolicy: Always
+  volumeClaimTemplates:
+  - metadata:
+      name: pi-hole-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

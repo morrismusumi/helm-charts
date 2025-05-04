@@ -1,0 +1,9 @@
+apiVersion: v2
+name: pi-hole
+description: A Pi-Hole Helm chart
+
+type: application
+
+version: 0.1.0
+
+appVersion: "2025.04.0"
