@@ -1,0 +1,101 @@
+# ETCD
+######################################################
+
+etcd:
+  image:
+    registry: docker.io
+    repository: bitnami/etcd
+    tag: 3.5.21-debian-12-r4
+    digest: "" 
+  auth:
+    rbac:
+      create: false
+
+# CoreDNS
+######################################################
+
+coredns:
+  image:
+    repository: coredns/coredns
+    tag: 1.12.0
+  isClusterService: false
+  serviceType: "NodePort"
+  servers:
+  - zones:
+    - zone: .
+    port: 53
+    nodePort: 31101
+
+    plugins:
+    - name: errors
+
+    - name: health
+      configBlock: |-
+        lameduck 10s
+
+    - name: ready
+
+    - name: import
+      parameters: /opt/coredns/Corefile
+
+    - name: forward
+      parameters: . /etc/resolv.conf
+    - name: cache
+      parameters: 30
+    - name: loop
+    - name: reload
+    - name: loadbalance
+
+  domainName: home.lab
+
+  extraVolumes: 
+  - name: custom-config-volume
+    configMap: 
+      name: coredns-custom
+
+  extraVolumeMounts:
+  - name: custom-config-volume
+    mountPath: /opt/coredns
+
+# ExternalDNS
+######################################################
+
+external-dns:
+  image: 
+    repository: registry.k8s.io/external-dns/external-dns
+    tag: v0.16.1
+
+  registry: noop
+
+  provider:
+    name: coredns
+
+  sources:
+    - ingress
+
+  policy: sync
+  extraArgs: []
+
+  env:
+    - name: ETCD_URLS
+      valueFrom:
+        secretKeyRef:
+          name: etcd-urls
+          key: ETCD_URLS
+          
+  # logLevel: debug
+
+# IngressNginx
+######################################################
+
+ingress-nginx:
+  controller:
+    image:
+      image: ingress-nginx/controller
+      tag: "v1.12.2"
+    service:
+      externalIPs: 
+        - 192.168.0.73
+      nodePorts:
+        http: "31100"
+        https: "31200"

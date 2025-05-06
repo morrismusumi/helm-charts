@@ -1,0 +1,15 @@
+dependencies:
+- name: etcd
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.3.1
+- name: coredns
+  repository: https://coredns.github.io/helm
+  version: 1.42.0
+- name: external-dns
+  repository: https://kubernetes-sigs.github.io/external-dns
+  version: 1.16.1
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.12.2
+digest: sha256:c2875936c496eb47b1796b78cb94ff3ef3674f921e7417ebc6d1983dd5ad6c54
+generated: "2025-05-05T13:01:36.882548+02:00"

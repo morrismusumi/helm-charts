@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "ingress-auto-dns.labels" . | nindent 4 }}
+data:
+  Corefile: |-
+    etcd {{ .Values.coredns.domainName }} {
+        endpoint {{ printf "http://%s-etcd.%s.svc.cluster.local:2379" (include "ingress-auto-dns.fullname" .) .Release.Namespace }}
+        path /skydns
+        fallthrough
+    }

@@ -8,6 +8,7 @@ This repository contains a collection of Helm charts for commonly used developer
 | Chart Name       | Description                             |
 |------------------|-----------------------------------------|
 | `pi-hole`        | A Pi-Hole Helm chart                    |
+| `ingress-auto-dns` | rapidly bootstrap an automated internal DNS system                  |
 | `...`            | More charts coming soon!                |
 
 > Each chart is self-contained in its own directory under `/charts`.
