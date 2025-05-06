@@ -3,6 +3,30 @@ entries:
   ingress-auto-dns:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-05-06T07:02:31.24741859Z"
+    dependencies:
+    - name: etcd
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.3.1
+    - name: coredns
+      repository: https://coredns.github.io/helm
+      version: 1.42.0
+    - name: external-dns
+      repository: https://kubernetes-sigs.github.io/external-dns
+      version: 1.16.1
+    - name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
+      version: 4.12.2
+    description: A Helm chart designed to rapidly bootstrap an automated internal
+      DNS system for newly created Kubernetes clusters
+    digest: d85f00f4384183e06b0e9102d8abd9a393d9d72eacc1c7ee4a8df80b0bb9185f
+    name: ingress-auto-dns
+    type: application
+    urls:
+    - ingress-auto-dns-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-05-06T05:41:12.792436846Z"
     dependencies:
     - name: etcd
@@ -46,4 +70,4 @@ entries:
     urls:
     - https://github.com/morrismusumi/helm-charts/releases/download/pi-hole-0.1.1/pi-hole-0.1.1.tgz
     version: 0.1.1
-generated: "2025-05-06T05:41:12.990294519Z"
+generated: "2025-05-06T07:02:31.413778097Z"
