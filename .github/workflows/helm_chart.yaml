@@ -37,35 +37,34 @@ jobs:
           curl -sSL https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz | tar xz
           sudo mv cr /usr/local/bin/cr
 
-      # - name: Upload new charts
-      #   env:
-      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      #   run: |
-      #     cr upload --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }}) \
-      #       --charts charts --skip-existing
-
-      # - name: Update index
-      #   env:
-      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      #   run: |
-      #     cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }}) \
-      #       --charts charts --push
-      - name: Upload new chart releases (skip existing)
+      - name: Upload new charts
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          cr upload \
-            --owner "${{ github.repository_owner }}" \
-            --git-repo "$(basename ${{ github.repository }})" \
-            --charts-dir charts \
-            --skip-existing
+          cr upload --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }})  --skip-existing
 
-      - name: Update Helm repo index
+      - name: Update index
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          cr index \
-            --owner "${{ github.repository_owner }}" \
-            --git-repo "$(basename ${{ github.repository }})" \
-            --charts-dir charts \
-            --push
+          cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }})  --push
+          
+      # - name: Upload new chart releases (skip existing)
+      #   env:
+      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      #   run: |
+      #     cr upload \
+      #       --owner "${{ github.repository_owner }}" \
+      #       --git-repo "$(basename ${{ github.repository }})" \
+      #       --charts-dir charts \
+      #       --skip-existing
+
+      # - name: Update Helm repo index
+      #   env:
+      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      #   run: |
+      #     cr index \
+      #       --owner "${{ github.repository_owner }}" \
+      #       --git-repo "$(basename ${{ github.repository }})" \
+      #       --charts-dir charts \
+      #       --push
