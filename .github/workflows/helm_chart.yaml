@@ -47,13 +47,13 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          cr upload --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }})  --skip-existing
+          cr upload --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }})  --packages-with-index --skip-existing
 
       - name: Update index
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }})  --push
+          cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }}) --packages-with-index --index-path --push
 
       # - name: Upload new chart releases (skip existing)
       #   env:
