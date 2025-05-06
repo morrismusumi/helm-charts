@@ -53,7 +53,7 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }}) --packages-with-index --index-path --push
+          cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }}) --packages-with-index --index-path . --push
 
       # - name: Upload new chart releases (skip existing)
       #   env:
