@@ -37,6 +37,12 @@ jobs:
           curl -sSL https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz | tar xz
           sudo mv cr /usr/local/bin/cr
 
+      - name: Package new charts
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          cr package charts/*
+
       - name: Upload new charts
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -48,7 +54,7 @@ jobs:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
           cr index --owner ${{ github.repository_owner }} --git-repo $(basename ${{ github.repository }})  --push
-          
+
       # - name: Upload new chart releases (skip existing)
       #   env:
       #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
