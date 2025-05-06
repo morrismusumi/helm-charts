@@ -8,6 +8,13 @@ All components in this chart are included as Helm chart dependencies for modular
 
 ---
 
+## Requirements
+
+- Kubernetes cluster with access to specified NodePorts (31100, 31101, 31200)
+- Helm 3+
+
+---
+
 ## Components
 
 ### 1. etcd
@@ -55,6 +62,29 @@ NGINX Ingress Controller configured for internal use with predictable NodePort e
 - Static external IP: `192.168.0.73`
 
 ---
+## Create a kind cluster
+```bash
+cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 31100
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 31200
+    hostPort: 443
+    protocol: TCP
+  - containerPort: 31101
+    hostPort: 5153
+    protocol: UDP
+  - containerPort: 31102
+    hostPort: 5253
+    protocol: TCP
+- role: worker
+EOF
+```
 
 ## Installation
 
@@ -69,10 +99,35 @@ helm install ingress-auto-dns morrismusumi-helm-charts/ingress-auto-dns
 
 ---
 
-## Requirements
+## Usage with Dnsmasq
 
-- Kubernetes cluster with access to specified NodePorts (31100, 31101, 31200)
-- Helm 3+
+Once installed you can forward DNS queries for your domain to any nodeIP on the chosen port. 
+
+Here is an example using dnsmasq on MacOS, but the same proceedure can be adapted to your OS of choice.
+
+```bash
+# install dnsmasq
+sudo brew install dnsmasq
+
+# configure dnsmasq to forward dns queries for 
+# internal.lab to coredns port 5153 exposed on the kind cluster
+sudo  echo "server=/internal.lab/127.0.0.1#5153" > /opt/homebrew/etc/dnsmasq.d/internal.conf
+
+# ensure dnsmasq is started
+sudo brew services start dnsmasq
+
+OR
+
+sudo brew services restart dnsmasq
+
+# check that dnsmasq is running
+sudo brew services list
+
+# test dns resolution
+dig @127.0.0.1 nginx-app.internal.lab
+```
+
+Add 127.0.0.1 as a dns server in network settings.
 
 ---
 
